@@ -15,7 +15,8 @@ api = Api(app)
 class TextResource(Resource):
 
     def get(self, parameters):
-        pass
+        print(parameters)
+        return 'hello'
 
     def post(self):
         pass
