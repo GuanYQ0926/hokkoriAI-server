@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
-
-import os
+import sys
+import io
 import werkzeug
 import numpy as np
 from flask import Flask
@@ -10,8 +10,8 @@ from keras.models import model_from_json
 from keras.optimizers import Adam
 
 
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
-app.config['JSON_AS_ASCII'] = False
 api = Api(app)
 
 
