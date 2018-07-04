@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 import os
 import werkzeug
 import numpy as np
@@ -9,6 +11,7 @@ from keras.optimizers import Adam
 
 
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
 api = Api(app)
 
 
