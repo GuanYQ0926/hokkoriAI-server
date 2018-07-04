@@ -80,15 +80,16 @@ class ImageResource(Resource):
 
 class AudioResource(Resource):
 
-    def get(self, parameters):
-        pass
-
-    def post(self, parameters):
+    def post(self):
         print('in audio processor')
-        print(parameters)
+        parse = reqparse.RequestParser()
+        parse.add_argument('audio', type=werkzeug.FileStorage,
+                           location='files/audio')
+        args = parse.parse_args()
+        stream = args['audio'].stream
         with tempfile.NamedTemporaryFile(dir='./files/audio/',
                                          delete=False) as f:
-            for chunk in parameters.iter_content():
+            for chunk in stream.iter_content():
                 f.write(chunk)
             tempfile_path = f.name
             os.rename(tempfile_path, './files/audio/temp.wav')
@@ -106,7 +107,7 @@ class VideoResource(Resource):
 
 api.add_resource(TextResource, '/text/<parameters>')
 api.add_resource(ImageResource, '/image/<parameters>')
-api.add_resource(AudioResource, '/audio/<parameters>')
+api.add_resource(AudioResource, '/audio')
 api.add_resource(VideoResource, '/video/<parameters>')
 
 
