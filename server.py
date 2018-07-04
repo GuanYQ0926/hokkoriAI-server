@@ -24,11 +24,13 @@ class AudioResource(Resource):
 
     def post(self):
         print('in audio processor')
-        parse = reqparse.RequestParser()
-        parse.add_argument('audio', type=werkzeug.FileStorage,
-                           location='files/audio')
-        data = parse.parse_args()
-        stream = data['audio']
+        # parse = reqparse.RequestParser()
+        # parse.add_argument('audio', type=werkzeug.FileStorage,
+        #                    location='files/audio')
+        # data = parse.parse_args()
+        # stream = data['audio']
+        json_data = request.get_json(force=True)
+        stream = json_data['audio']
         with tempfile.NamedTemporaryFile(dir='./files/audio/',
                                          delete=False) as f:
             for chunk in stream.iter_content():
