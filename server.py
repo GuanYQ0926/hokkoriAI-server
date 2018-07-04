@@ -24,7 +24,6 @@ class AudioResource(Resource):
 
     def post(self):
         print('in audio processor')
-        print(request.json())
         parser = reqparse.RequestParser()
         parser.add_argument('audio', type=werkzeug.datastructures.FileStorage,
                             location='files')
