@@ -3,6 +3,7 @@ import sys
 import io
 import os
 import werkzeug
+import tempfile
 import numpy as np
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
@@ -82,8 +83,14 @@ class AudioResource(Resource):
     def get(self, parameters):
         pass
 
-    def post(self):
-        pass
+    def post(self, parameters):
+        with tempfile.NamedTemporaryFile(dir='./files/audio/',
+                                         delete=False) as f:
+            for chunk in parameters.iter_content():
+                f.write(chunk)
+            tempfile_path = f.name
+            os.rename(tempfile_path, './files/audio/temp.wav')
+        return 'saved'
 
 
 class VideoResource(Resource):
