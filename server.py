@@ -5,7 +5,7 @@ import os
 import werkzeug
 import tempfile
 import numpy as np
-from flask import Flask
+from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 import cv2
 from keras.models import model_from_json
@@ -82,17 +82,20 @@ class AudioResource(Resource):
 
     def post(self):
         print('in audio processor')
-        parse = reqparse.RequestParser()
-        parse.add_argument('audio', type=werkzeug.FileStorage,
-                           location='files/audio')
-        args = parse.parse_args()
-        stream = args['audio'].stream
-        with tempfile.NamedTemporaryFile(dir='./files/audio/',
-                                         delete=False) as f:
-            for chunk in stream.iter_content():
-                f.write(chunk)
-            tempfile_path = f.name
-            os.rename(tempfile_path, './files/audio/temp.wav')
+        json_data = request.get_json(force=True)
+        text = json_data['text']
+        print(text)
+        # parse = reqparse.RequestParser()
+        # parse.add_argument('audio', type=werkzeug.FileStorage,
+        #                    location='files/audio')
+        # args = parse.parse_args()
+        # stream = args['audio'].stream
+        # with tempfile.NamedTemporaryFile(dir='./files/audio/',
+        #                                  delete=False) as f:
+        #     for chunk in stream.iter_content():
+        #         f.write(chunk)
+        #     tempfile_path = f.name
+        #     os.rename(tempfile_path, './files/audio/temp.wav')
         return 'saved'
 
 
