@@ -84,6 +84,8 @@ class AudioResource(Resource):
         pass
 
     def post(self, parameters):
+        print('in audio processor')
+        print(parameters)
         with tempfile.NamedTemporaryFile(dir='./files/audio/',
                                          delete=False) as f:
             for chunk in parameters.iter_content():
