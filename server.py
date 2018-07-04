@@ -29,7 +29,13 @@ class AudioResource(Resource):
         #                    location='files/audio')
         # data = parse.parse_args()
         # stream = data['audio']
-        stream = request.get_json(force=True)
+        # stream = request.get_json(force=True)
+        parser = reqparse.RequestParser()
+        parser.add_argument('audio', type=werkzeug.datastructures.FileStorage,
+                            location='files')
+        data = parser.parse_args()
+        print('data: ', data)
+        stream = data['audio'].stream
         print(type(stream))
         print(stream)
         with tempfile.NamedTemporaryFile(dir='./files/audio/',
