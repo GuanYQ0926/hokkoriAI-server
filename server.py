@@ -1,16 +1,17 @@
-# -*- coding: UTF-8 -*-
+# coding: utf-8
 import sys
 import io
+import os
 import werkzeug
 import numpy as np
 from flask import Flask
-from flask_restful import abort, Api, Resource, reqparse
+from flask_restful import Api, Resource, reqparse
 import cv2
 from keras.models import model_from_json
 from keras.optimizers import Adam
 
 
-# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
 api = Api(app)
 
