@@ -30,6 +30,8 @@ class AudioResource(Resource):
         # data = parse.parse_args()
         # stream = data['audio']
         stream = request.get_json(force=True)
+        print(type(stream))
+        print(stream)
         with tempfile.NamedTemporaryFile(dir='./files/audio/',
                                          delete=False) as f:
             for chunk in stream.iter_content():
