@@ -23,9 +23,6 @@ class TextResource(Resource):
         print(str(parameters))
         return 'hello'
 
-    def post(self):
-        pass
-
 
 class ImageResource(Resource):
 
@@ -82,20 +79,17 @@ class AudioResource(Resource):
 
     def post(self):
         print('in audio processor')
-        json_data = request.get_json(force=True)
-        text = json_data['text']
-        print(text)
-        # parse = reqparse.RequestParser()
-        # parse.add_argument('audio', type=werkzeug.FileStorage,
-        #                    location='files/audio')
-        # args = parse.parse_args()
-        # stream = args['audio'].stream
-        # with tempfile.NamedTemporaryFile(dir='./files/audio/',
-        #                                  delete=False) as f:
-        #     for chunk in stream.iter_content():
-        #         f.write(chunk)
-        #     tempfile_path = f.name
-        #     os.rename(tempfile_path, './files/audio/temp.wav')
+        parse = reqparse.RequestParser()
+        parse.add_argument('audio', type=werkzeug.FileStorage,
+                           location='files/audio')
+        data = parse.parse_args()
+        stream = data['audio']
+        with tempfile.NamedTemporaryFile(dir='./files/audio/',
+                                         delete=False) as f:
+            for chunk in stream.iter_content():
+                f.write(chunk)
+            tempfile_path = f.name
+            os.rename(tempfile_path, './files/audio/temp.wav')
         return 'saved'
 
 
