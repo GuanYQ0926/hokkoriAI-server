@@ -3,6 +3,7 @@ import sys
 import io
 import os
 import werkzeug
+import wave
 import tempfile
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
@@ -24,9 +25,15 @@ class AudioResource(Resource):
 
     def post(self):
         print('in audio processor')
-        print(request.get_data())
-        print('data', request.data)
-        print('form', request.form)
+        # print(request.get_data())
+        stream = request.get_data()
+        # print('data', request.data)
+        # print('form', request.form)
+        path = 'files/audio/temp.wav'
+        rate = 44100
+        with wave.open(path, 'w') as output:
+            output.setparams((2, 2, rate, 0, 'NONE', 'not compressed'))
+            output.writeframes(stream)
         # parser = reqparse.RequestParser()
         # parser.add_argument('audio', type=werkzeug.datastructures.FileStorage,
         #                     location='files')
