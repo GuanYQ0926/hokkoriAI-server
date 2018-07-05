@@ -27,7 +27,7 @@ class AudioResource(Resource):
         print('in audio processor')
         stream = request.get_data()
         print('data', request.data)
-        file_path = './files/audio/temp.wav'
+        file_path = './files/audio/temp.m4a'
         with tempfile.NamedTemporaryFile(dir='./files/audio/',
                                          delete=False) as f:
             f.write(stream)
