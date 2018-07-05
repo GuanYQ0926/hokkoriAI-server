@@ -27,7 +27,12 @@ class AudioResource(Resource):
         print('in audio processor')
         stream = request.get_data()
         print('data', request.data)
-        path = 'files/audio/temp.wav'
+        file_path = './files/audio/temp.m4a'
+        with tempfile.NamedTemporaryFile(dir='./files/audio/',
+                                         delete=False) as f:
+            f.write(stream)
+            tempfile_path = f.name
+            os.rename(tempfile_path, file_path)
         # rate = 44100
         # with wave.open(path, 'wb') as output:
         #     output.setparams((2, 2, rate, 0, 'NONE', 'not compressed'))
