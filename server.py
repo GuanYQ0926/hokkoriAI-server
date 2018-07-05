@@ -7,6 +7,8 @@ import wave
 import tempfile
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
+from werkzeug.utils import secure_filename
+
 
 
 # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -26,8 +28,11 @@ class AudioResource(Resource):
     def post(self):
         print('in audio processor')
         file = request.files['file']
-        print('file', file)
-        
+        file.save('./files/audio/temp.m4a')
+        stream = request.get_data()
+        print(stream == file)
+
+
         # stream = request.get_data()
         # print('data', request.data)
         # file_path = './files/audio/temp.m4a'
