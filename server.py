@@ -2,16 +2,13 @@
 import sys
 import io
 import os
-import werkzeug
 import wave
 import tempfile
 from flask import Flask, request
-from flask_restful import Api, Resource, reqparse
-from werkzeug.utils import secure_filename
+from flask_restful import Api, Resource
 
 
-
-# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
 api = Api(app)
 
@@ -29,37 +26,6 @@ class AudioResource(Resource):
         print('in audio processor')
         file = request.files['file']
         file.save('./files/audio/temp.m4a')
-        stream = request.get_data()
-        print(stream == file)
-
-
-        # stream = request.get_data()
-        # print('data', request.data)
-        # file_path = './files/audio/temp.m4a'
-        # with tempfile.NamedTemporaryFile(dir='./files/audio/',
-        #                                  delete=False) as f:
-        #     f.write(stream)
-        #     tempfile_path = f.name
-        #     os.rename(tempfile_path, file_path)
-        # rate = 44100
-        # with wave.open(path, 'wb') as output:
-        #     output.setparams((2, 2, rate, 0, 'NONE', 'not compressed'))
-        #     output.writeframes(stream)
-        # parser = reqparse.RequestParser()
-        # parser.add_argument('audio', type=werkzeug.datastructures.FileStorage,
-        #                     location='files')
-        # data = parser.parse_args()
-        # print('data: ', data)
-        # stream = data['audio'].stream
-        # print(type(stream))
-        # print(stream)
-        # with tempfile.NamedTemporaryFile(dir='./files/audio/',
-        #                                  delete=False) as f:
-        #     for chunk in stream.iter_content():
-        #         f.write(chunk)
-        #     tempfile_path = f.name
-        #     os.rename(tempfile_path, './files/audio/temp.wav')
-
         return 'saved'
 
 
