@@ -2,8 +2,6 @@
 import sys
 import io
 import os
-import wave
-import tempfile
 from flask import Flask, request
 from flask_restful import Api, Resource
 
@@ -25,7 +23,7 @@ class AudioResource(Resource):
     def post(self):
         print('in audio processor')
         file = request.files['file']
-        file.save('./files/audio/temp.m4a')
+        file.save('./tempfiles/audio/temp.m4a')
         return 'saved'
 
 
