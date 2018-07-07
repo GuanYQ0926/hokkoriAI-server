@@ -37,7 +37,7 @@ class AudioResource(Resource):
 
     def post(self):
         # save audio file
-        file_path = './tempfiles/audio/temp.m4a'
+        file_path = './tempfiles/audio/temp.mp3'
         file = request.files['file']
         file.save(file_path)
         # process
