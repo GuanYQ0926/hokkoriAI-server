@@ -4,7 +4,6 @@ import io
 import json
 import MeCab
 import tempfile
-import librosa
 import cv2
 import numpy as np
 from keras.models import model_from_json

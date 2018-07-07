@@ -10,6 +10,7 @@ from keras.models import model_from_json
 from keras.optimizers import Adadelta
 
 
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
 api = Api(app)
@@ -51,6 +52,7 @@ class AudioResource(Resource):
                           mode='constant')
         mfcc = mfcc.reshape(1, 20, max_pad_len, 1)
         result = audio_model.predict(mfcc)[0]
+        print('======', result)
         return result
 
 
