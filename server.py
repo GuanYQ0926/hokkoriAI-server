@@ -37,9 +37,11 @@ class AudioResource(Resource):
 
     def post(self):
         # save audio file
+        print('audio request in coming')
         file_path = './tempfiles/audio/temp.mp3'
         file = request.files['file']
         file.save(file_path)
+        print('audio file is temporally saved')
         # process
         max_pad_len = 500
         wave, sr = librosa.load(file_path, mono=True, sr=None)
@@ -52,6 +54,7 @@ class AudioResource(Resource):
                           mode='constant')
         mfcc = mfcc.reshape(1, 20, max_pad_len, 1)
         res = audio_model.predict(mfcc)[0].tolist()
+        print('prediction end')
         return jsonify(fussy=res[0], hungry=res[1], pain=res[2])
 
 
