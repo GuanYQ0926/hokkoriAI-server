@@ -10,6 +10,7 @@ from keras.models import model_from_json
 from keras.optimizers import Adadelta
 
 
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
 api = Api(app)
@@ -39,9 +40,11 @@ class AudioResource(Resource):
         file_path = './tempfiles/audio/temp.mp3'
         file = request.files['file']
         file.save(file_path)
+        print('====saved====')
         # process
         max_pad_len = 500
         wave, sr = librosa.load(file_path, mono=True, sr=None)
+        print('====loaded====')
         mfcc = librosa.feature.mfcc(wave, sr=sr)
         if mfcc.shape[1] > max_pad_len:
             mfcc = mfcc[:, :max_pad_len]
@@ -50,6 +53,7 @@ class AudioResource(Resource):
             mfcc = np.pad(mfcc, pad_width=((0, 0), (0, pad_width)),
                           mode='constant')
         mfcc = mfcc.reshape(1, 20, max_pad_len, 1)
+        print('====reshaped====')
         result = audio_model.predict(mfcc)[0]
         print('======', result)
         return jsonify(result)
