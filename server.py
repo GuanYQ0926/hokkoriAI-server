@@ -51,7 +51,7 @@ class AudioResource(Resource):
             mfcc = np.pad(mfcc, pad_width=((0, 0), (0, pad_width)),
                           mode='constant')
         mfcc = mfcc.reshape(1, 20, max_pad_len, 1)
-        res = audio_model.predict(mfcc)[0]
+        res = audio_model.predict(mfcc)[0].tolist()
         return jsonify(fussy=res[0], hungry=res[1], pain=res[2])
 
 
