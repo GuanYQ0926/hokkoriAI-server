@@ -11,7 +11,7 @@ from keras.optimizers import Adadelta
 
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
 api = Api(app)
 
