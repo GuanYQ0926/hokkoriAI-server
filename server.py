@@ -29,8 +29,7 @@ audio_model.compile(loss='categorical_crossentropy', optimizer=Adadelta(),
 class TextResource(Resource):
 
     def get(self, parameters):
-        print(str(parameters))
-        return 'hello'
+        return str(parameters)
 
 
 class AudioResource(Resource):
