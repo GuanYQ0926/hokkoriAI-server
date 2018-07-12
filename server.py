@@ -16,16 +16,6 @@ app = Flask(__name__)
 api = Api(app)
 
 
-# load model in advance
-with open('./models/sounds/model.json', 'r') as f:
-    model_json = f.read()
-audio_model = model_from_json(model_json)
-audio_model.load_weights('./models/sounds/model.h5')
-print('model loaded')
-audio_model.compile(loss='categorical_crossentropy', optimizer=Adadelta(),
-                    metrics=['accuracy'])
-
-
 class TextResource(Resource):
 
     def get(self, parameters):
@@ -35,6 +25,14 @@ class TextResource(Resource):
 class AudioResource(Resource):
 
     def post(self):
+        # load model in advance
+        with open('./models/sounds/model.json', 'r') as f:
+            model_json = f.read()
+        audio_model = model_from_json(model_json)
+        audio_model.load_weights('./models/sounds/model.h5')
+        print('model loaded')
+        audio_model.compile(loss='categorical_crossentropy',
+                            optimizer=Adadelta(), metrics=['accuracy'])
         # save audio file
         print('audio request in coming')
         file_path = './tempfiles/audio/temp.mp3'

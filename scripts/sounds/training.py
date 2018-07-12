@@ -4,10 +4,11 @@ import json
 import math
 import librosa
 from pydub import AudioSegment
-import keras
 from keras.utils import np_utils
+from keras.optimizers import Adadelta, SGD
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
 
 
 def preprocess():
@@ -88,7 +89,9 @@ def model_training():
     with open('../../models/sounds/vec_label.json', 'r') as f:
         dataset = json.load(f)
     X_train, X_test, Y_train, Y_test = get_training_data(dataset)
+    # init model
     model = Sequential()
+    # 1st convolution layer
     model.add(Conv2D(64, kernel_size=(2, 2), activation='relu',
                      input_shape=(20, 500, 1)))
     model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -97,9 +100,8 @@ def model_training():
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.25))
     model.add(Dense(3, activation='softmax'))
-    model.compile(loss=keras.losses.categorical_crossentropy,
-                  optimizer=keras.optimizers.Adadelta(),
-                  metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=SGD(lr=0.01), metrics=['accuracy'])
     model.fit(X_train, Y_train, batch_size=20, epochs=10, verbose=1,
               validation_data=(X_test, Y_test))
     # save model
