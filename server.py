@@ -25,7 +25,7 @@ def text(parameters):
 
 
 @app.route("/audio", methods=['POST', 'GET'])
-def post(self):
+def post():
     # load model in advance
     with open('./models/sounds/model.json', 'r') as f:
         model_json = f.read()
