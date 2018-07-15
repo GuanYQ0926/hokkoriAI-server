@@ -19,9 +19,9 @@ api = Api(app)
 #
 #     def get(self, parameters):
 #         return str(parameters)
-@app.route("/text/<text>", methods=['POST', 'GET'])
-def text():
-    return text
+@app.route("/text/<parameters>", methods=['POST', 'GET'])
+def text(parameters):
+    return parameters
 
 
 class AudioResource(Resource):
