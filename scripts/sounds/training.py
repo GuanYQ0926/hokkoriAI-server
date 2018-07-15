@@ -82,6 +82,7 @@ def get_training_data(dataset):
     X_test = test_data.reshape(test_data.shape[0], 20, 500, 1)
     Y_train = np_utils.to_categorical(train_label, 3)
     Y_test = np_utils.to_categorical(test_label, 3)
+    print(Y_train)
     return X_train, X_test, Y_train, Y_test
 
 
@@ -97,11 +98,12 @@ def model_training():
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
     model.add(Flatten())
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(512, activation='relu'))
     model.add(Dropout(0.25))
     model.add(Dense(3, activation='softmax'))
+    # opt = SGD(lr=0.01)
     model.compile(loss='categorical_crossentropy',
-                  optimizer=SGD(lr=0.01), metrics=['accuracy'])
+                  optimizer=Adadelta(), metrics=['accuracy'])
     model.fit(X_train, Y_train, batch_size=20, epochs=10, verbose=1,
               validation_data=(X_test, Y_test))
     # save model

@@ -10,16 +10,18 @@ from keras.models import model_from_json
 from keras.optimizers import Adadelta
 
 
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
 # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
 api = Api(app)
 
 
-class TextResource(Resource):
-
-    def get(self, parameters):
-        return str(parameters)
+# class TextResource(Resource):
+#
+#     def get(self, parameters):
+#         return str(parameters)
+@app.route("/text/<text>", methods=['POST', 'GET'])
+def text():
+    return text
 
 
 class AudioResource(Resource):
@@ -55,7 +57,7 @@ class AudioResource(Resource):
         return jsonify(fussy=res[0], hungry=res[1], pain=res[2])
 
 
-api.add_resource(TextResource, '/text/<parameters>')
+# api.add_resource(TextResource, '/text/<parameters>')
 api.add_resource(AudioResource, '/audio')
 
 
