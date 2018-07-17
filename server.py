@@ -10,7 +10,7 @@ from keras.models import model_from_json
 from keras.optimizers import Adadelta
 
 
-# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 app = Flask(__name__)
 api = Api(app)
 
