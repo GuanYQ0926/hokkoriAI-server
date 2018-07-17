@@ -31,15 +31,12 @@ def post():
         model_json = f.read()
     audio_model = model_from_json(model_json)
     audio_model.load_weights('./models/sounds/model.h5')
-    print('model loaded')
     audio_model.compile(loss='categorical_crossentropy',
                         optimizer=Adadelta(), metrics=['accuracy'])
     # save audio file
-    print('audio request in coming')
     file_path = './tempfiles/audio/temp.mp3'
     file = request.files['file']
     file.save(file_path)
-    print('audio file is temporally saved')
     # process
     max_pad_len = 500
     wave, sr = librosa.load(file_path, mono=True, sr=None)
@@ -52,7 +49,6 @@ def post():
                       mode='constant')
     mfcc = mfcc.reshape(1, 20, max_pad_len, 1)
     res = audio_model.predict(mfcc)[0].tolist()
-    print('prediction end')
     return jsonify(fussy=res[0], hungry=res[1], pain=res[2])
 
 
@@ -64,15 +60,12 @@ def post():
 #             model_json = f.read()
 #         audio_model = model_from_json(model_json)
 #         audio_model.load_weights('./models/sounds/model.h5')
-#         print('model loaded')
 #         audio_model.compile(loss='categorical_crossentropy',
 #                             optimizer=Adadelta(), metrics=['accuracy'])
 #         # save audio file
-#         print('audio request in coming')
 #         file_path = './tempfiles/audio/temp.mp3'
 #         file = request.files['file']
 #         file.save(file_path)
-#         print('audio file is temporally saved')
 #         # process
 #         max_pad_len = 500
 #         wave, sr = librosa.load(file_path, mono=True, sr=None)
@@ -85,7 +78,6 @@ def post():
 #                           mode='constant')
 #         mfcc = mfcc.reshape(1, 20, max_pad_len, 1)
 #         res = audio_model.predict(mfcc)[0].tolist()
-#         print('prediction end')
 #         return jsonify(fussy=res[0], hungry=res[1], pain=res[2])
 
 
