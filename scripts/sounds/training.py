@@ -9,6 +9,9 @@ from keras.optimizers import Adadelta, SGD
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
+from keras.models import model_from_json
+
+length = 11
 
 
 def preprocess():
@@ -33,9 +36,11 @@ def preprocess():
 
 
 def training_data():
-    def wav2mfcc(file_path, max_pad_len=500):
+    def wav2mfcc(file_path, max_pad_len=length):
         wave, sr = librosa.load(file_path, mono=True, sr=None)
-        mfcc = librosa.feature.mfcc(wave, sr=sr)
+        mfcc = librosa.feature.mfcc(wave, sr=16000)
+        wave = wave[::3]
+        print(mfcc.shape)
         if mfcc.shape[1] > max_pad_len:
             mfcc = mfcc[:, :max_pad_len]
         else:
@@ -63,7 +68,7 @@ def training_data():
 def get_training_data(dataset):
     # prepare training data
     data_len = len(dataset)
-    rate = 0.8
+    rate = 0.9
     train_len = math.floor(rate * data_len)
     train_data, train_label = [], []
     test_data, test_label = [], []
@@ -78,8 +83,8 @@ def get_training_data(dataset):
             test_label.append(label)
     train_data, train_label, test_data, test_label = np.array(train_data),\
         np.array(train_label), np.array(test_data), np.array(test_label)
-    X_train = train_data.reshape(train_data.shape[0], 20, 500, 1)
-    X_test = test_data.reshape(test_data.shape[0], 20, 500, 1)
+    X_train = train_data.reshape(train_data.shape[0], 20, length, 1)
+    X_test = test_data.reshape(test_data.shape[0], 20, length, 1)
     Y_train = np_utils.to_categorical(train_label, 3)
     Y_test = np_utils.to_categorical(test_label, 3)
     print(Y_train)
@@ -93,12 +98,12 @@ def model_training():
     # init model
     model = Sequential()
     # 1st convolution layer
-    model.add(Conv2D(64, kernel_size=(2, 2), activation='relu',
-                     input_shape=(20, 500, 1)))
+    model.add(Conv2D(32, kernel_size=(2, 2), activation='relu',
+                     input_shape=(20, length, 1)))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
     model.add(Flatten())
-    model.add(Dense(512, activation='relu'))
+    model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.25))
     model.add(Dense(3, activation='softmax'))
     # opt = SGD(lr=0.01)
@@ -115,6 +120,31 @@ def model_training():
     print('finish saving model')
 
 
+def test():
+    with open('../../models/sounds/model.json', 'r') as f:
+        model_json = f.read()
+    audio_model = model_from_json(model_json)
+    audio_model.load_weights('../../models/sounds/model.h5')
+    audio_model.compile(loss='categorical_crossentropy',
+                        optimizer=Adadelta(), metrics=['accuracy'])
+    # process
+    max_pad_len = length
+    for i in range(1, 30):
+        file_path = '../../data/sounds/' + str(i) + '.mp3'
+        wave, sr = librosa.load(file_path, mono=True, sr=None)
+        mfcc = librosa.feature.mfcc(wave, sr=sr)
+        if mfcc.shape[1] > max_pad_len:
+            mfcc = mfcc[:, :max_pad_len]
+        else:
+            pad_width = max_pad_len - mfcc.shape[1]
+            mfcc = np.pad(mfcc, pad_width=((0, 0), (0, pad_width)),
+                          mode='constant')
+        mfcc = mfcc.reshape(1, 20, max_pad_len, 1)
+        res = audio_model.predict(mfcc)[0].tolist()
+        print(i, res)
+
+
 if __name__ == '__main__':
-    training_data()
-    model_training()
+    # training_data()
+    # model_training()
+    test()
