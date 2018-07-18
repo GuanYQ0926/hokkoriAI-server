@@ -145,6 +145,6 @@ def test():
 
 
 if __name__ == '__main__':
-    # training_data()
-    # model_training()
+    training_data()
+    model_training()
     test()
