@@ -3,7 +3,7 @@ import pandas as pd
 import json
 import math
 import librosa
-from pydub import AudioSegment
+# from pydub import AudioSegment
 from keras.utils import np_utils
 from keras.optimizers import Adadelta, SGD
 from keras.models import Sequential
@@ -14,25 +14,25 @@ from keras.models import model_from_json
 length = 11
 
 
-def preprocess():
-    count = 1
-    for filename in range(1, 16):
-        filename = str(filename)
-        sound = AudioSegment.from_file('./data/raw_sounds/' + filename +
-                                       '.mp3', format='mp3')
-        duration = int(sound.duration_seconds) * 1000
-        print(duration)
-        # sample sound every 5 second
-        if duration <= 5000:
-            sound.export('./data/sounds/' + str(count) + '.mp3', format='mp3')
-            count += 1
-        else:
-            step = 5000
-            for i in range(step, duration, step):
-                subsound = sound[i - step:i]
-                subsound.export('./data/sounds/' + str(count) + '.mp3',
-                                format='mp3')
-                count += 1
+# def preprocess():
+#     count = 1
+#     for filename in range(1, 16):
+#         filename = str(filename)
+#         sound = AudioSegment.from_file('./data/raw_sounds/' + filename +
+#                                        '.mp3', format='mp3')
+#         duration = int(sound.duration_seconds) * 1000
+#         print(duration)
+#         # sample sound every 5 second
+#         if duration <= 5000:
+#             sound.export('./data/sounds/' + str(count) + '.mp3', format='mp3')
+#             count += 1
+#         else:
+#             step = 5000
+#             for i in range(step, duration, step):
+#                 subsound = sound[i - step:i]
+#                 subsound.export('./data/sounds/' + str(count) + '.mp3',
+#                                 format='mp3')
+#                 count += 1
 
 
 def training_data():
