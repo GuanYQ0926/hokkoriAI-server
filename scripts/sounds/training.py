@@ -5,13 +5,13 @@ import math
 import librosa
 # from pydub import AudioSegment
 from keras.utils import np_utils
-from keras.optimizers import Adadelta, SGD
+from keras.optimizers import Adadelta
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
+from keras.layers import Conv2D, MaxPooling2D
 from keras.models import model_from_json
 
-length = 11
+length = 20
 
 
 # def preprocess():
@@ -38,8 +38,8 @@ length = 11
 def training_data():
     def wav2mfcc(file_path, max_pad_len=length):
         wave, sr = librosa.load(file_path, mono=True, sr=None)
-        mfcc = librosa.feature.mfcc(wave, sr=16000)
         wave = wave[::3]
+        mfcc = librosa.feature.mfcc(wave, sr=16000)
         print(mfcc.shape)
         if mfcc.shape[1] > max_pad_len:
             mfcc = mfcc[:, :max_pad_len]
@@ -98,18 +98,18 @@ def model_training():
     # init model
     model = Sequential()
     # 1st convolution layer
-    model.add(Conv2D(32, kernel_size=(2, 2), activation='relu',
+    model.add(Conv2D(32, kernel_size=(2, 2), strides=(1, 1), activation='relu',
                      input_shape=(20, length, 1)))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    model.add(Conv2D(64, (5, 5), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Flatten())
-    model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.25))
     model.add(Dense(3, activation='softmax'))
     # opt = SGD(lr=0.01)
     model.compile(loss='categorical_crossentropy',
                   optimizer=Adadelta(), metrics=['accuracy'])
-    model.fit(X_train, Y_train, batch_size=20, epochs=10, verbose=1,
+    model.fit(X_train, Y_train, batch_size=30, epochs=10, verbose=1,
               validation_data=(X_test, Y_test))
     # save model
     print('start saving model')
@@ -132,6 +132,7 @@ def test():
     for i in range(1, 30):
         file_path = '../../data/sounds/' + str(i) + '.mp3'
         wave, sr = librosa.load(file_path, mono=True, sr=None)
+        wave = wave[::3]
         mfcc = librosa.feature.mfcc(wave, sr=sr)
         if mfcc.shape[1] > max_pad_len:
             mfcc = mfcc[:, :max_pad_len]
