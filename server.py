@@ -38,8 +38,9 @@ def post():
     file = request.files['file']
     file.save(file_path)
     # process
-    max_pad_len = 500
+    max_pad_len = 20
     wave, sr = librosa.load(file_path, mono=True, sr=None)
+    wave = wave[::3]
     mfcc = librosa.feature.mfcc(wave, sr=sr)
     if mfcc.shape[1] > max_pad_len:
         mfcc = mfcc[:, :max_pad_len]
