@@ -9,7 +9,7 @@ import json
 # from pydub import AudioSegment
 
 
-def embedding():
+def data_dump():
     base, sr = librosa.load('../../data/sounds/line_data/BASE.mp3')
     base = base[9*sr:]
     sound1, _ = librosa.load('../../data/sounds/line_data/LINE1.m4a')
@@ -189,6 +189,6 @@ def simplex_projection(src, embed_E, advance=1, delta_T=1):
 
 
 if __name__ == '__main__':
-    embedding()
+    data_dump()
     # audio_display()
     # audio_derivative()
