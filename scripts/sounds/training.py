@@ -142,10 +142,10 @@ def test():
                           mode='constant')
         mfcc = mfcc.reshape(1, 20, max_pad_len, 1)
         res = audio_model.predict(mfcc)[0].tolist()
-        print(i, res)
+        print(i, np.argmax(res))
 
 
 if __name__ == '__main__':
-    training_data()
-    model_training()
+    # training_data()
+    # model_training()
     test()
