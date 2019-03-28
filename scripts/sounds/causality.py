@@ -1,7 +1,7 @@
 import librosa
 import librosa.display as display
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+# from mpl_toolkits.mplot3d import Axes3D
 import math
 import numpy as np
 from scipy.stats.stats import pearsonr
@@ -9,11 +9,13 @@ import json
 # from pydub import AudioSegment
 
 
+# acc -> mpf
+# 0.001 sample 16k
 def data_dump():
-    base, sr = librosa.load('../../data/sounds/line_data/BASE.mp3')
+    base, sr = librosa.load('../../data/sounds/line_data/BASE.mp3', sr=1000)
     base = base[9*sr:]
-    sound1, _ = librosa.load('../../data/sounds/line_data/LINE1.m4a')
-    sound2, _ = librosa.load('../../data/sounds/line_data/LINE3.m4a')
+    sound1, _ = librosa.load('../../data/sounds/line_data/LINE1.m4a', sr=1000)
+    sound2, _ = librosa.load('../../data/sounds/line_data/LINE3.m4a', sr=1000)
     end = min(len(base), len(sound1), len(sound2))
     start, end = 1, end
     base, sound1, sound2 = base[start:end], sound1[start:end], \
@@ -48,7 +50,7 @@ def data_dump():
 
 
 def audio_derivative():
-    base, sr = librosa.load('../../data/sounds/line_data/BASE.mp3')
+    base, sr = librosa.load('../../data/sounds/line_data/BASE.m4a')
     base = base[9*sr:]
     sound1, _ = librosa.load('../../data/sounds/line_data/LINE1.m4a')
     sound2, _ = librosa.load('../../data/sounds/line_data/LINE3.m4a')
@@ -69,10 +71,9 @@ def audio_derivative():
 
 
 def audio_display():
-    base, sr = librosa.load('../../data/sounds/line_data/BASE.mp3')
-    base = base[9*sr:]
-    sound1, _ = librosa.load('../../data/sounds/line_data/LINE1.m4a')
-    sound2, _ = librosa.load('../../data/sounds/line_data/LINE3.m4a')
+    base, sr = librosa.load('../../data/sounds/line_data/BASE.m4a')
+    sound1, _ = librosa.load('../../data/sounds/raw_sounds/crying_sounds/1.m4a')
+    sound2, _ = librosa.load('../../data/sounds/line_data/LINE1.m4a')
     # length = min(len(base), len(sound1), len(sound2))
     # base, sound1, sound2 = base[:length], sound1[:length], sound2[:length]
     # fig, axarr = plt.subplots(3)
@@ -81,6 +82,8 @@ def audio_display():
     # axarr[1].plot(sound1, linewidth=0.5)
     # axarr[2].plot(sound2, linewidth=0.5)
     # plt.show()
+    length = 6*sr
+    base, sound1, sound2 = base[40*sr:length+40*sr], sound1[:length], sound2[50*sr:length+50*sr]
     plt.subplot(3, 1, 1)
     display.waveplot(base, sr=sr, alpha=0.25)
     plt.subplot(3, 1, 2)
@@ -189,6 +192,6 @@ def simplex_projection(src, embed_E, advance=1, delta_T=1):
 
 
 if __name__ == '__main__':
-    data_dump()
+    # data_dump()
     # audio_display()
-    # audio_derivative()
+    audio_derivative()
